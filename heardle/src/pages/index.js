@@ -15,56 +15,77 @@ const eststs = `artist.search?q_artist=neighborhood&page_size=5&apikey=${process
 const apiKey = process.env.MUSIXMATCH_CLIENT_ID
 
 export default function Home() {
-//   for (let i = 0; i < data.length; i++){
 
-// console.log(data[i].Track_Name + ", by " + data[i].Artist_Name + "");
-// }
+  const [filteredData, setFilteredData] = useState(musicData);
+  //   for (let i = 0; i < data.length; i++){
+
+  // console.log(data[i].Track_Name + ", by " + data[i].Artist_Name + "");
+  // }
   //  access session information
   const { data: session } = useSession();
   //  console.log(session.accessToken);
   const [topArtists, setTopArtists] = useState([]);
+  const [lyrics, setLyrics] = useState('');
+  const [random, setRandom] = useState(0);
+  const [search, setSearch] = useState('');
+
+  function randomNumberInRange(min, max) {
+    // 👇️ get number between min (inclusive) and max (inclusive)
+    return Math.floor(Math.random() * (musicData.length - 0 + 1)) + 0;
+  }
+
+  const handleClick = () => {
+    setRandom(randomNumberInRange(1, 5));
+  };
+
+  const handleSearch = (event) => {
+    let value = event.target.value.toLowerCase();
+    let result = [];
+    // console.log(value);
+    result = musicData.filter((data) => {
+       console.log(data);
+      return data.Artist_Name.toLowerCase().search(value) != -1;
+    });
+    setFilteredData(result);
+  }
 
 
-  // useEffect(() => {
-  //   if (session && session.accessToken) {
+  // console.log(musicData[0].Track_Name);
 
-  //     const fetchData = async () => {
-  //       const response = await fetch("https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=5&offset=0", {
-  //         method: "GET", headers: { Authorization: `Bearer ${session.accessToken}` }
-  //       });
-  //       const json = await response.json();
-  //       setTopArtists(json.items);
-  //     };
-  //     fetchData();
-  //   }
-  // }, [session])
 
-  // console.log(`test ${process.env.SPOTIFY_CILLENT_ID}`)
+  const song = musicData[random]
+
   useEffect(() => {
     if (session && session.accessToken) {
 
-      const fetchMusic = async () => {
-        //TODO: Figure this out wtf
-        const response = await fetch(`https://cors-anywhere.herokuapp.com/http://api.musixmatch.com/ws/1.1/matcher.track.get?q_track=${musicData[455].Track_Name}&q_artist=${musicData[455].Artist_Name}&apikey=4290ff500d68899a2ef375d7d2e88f63`, {
-          method: "GET",
-        }
-        );
+      setRandom(Math.floor(Math.random() * (musicData.length - 0 + 1)) + 0);
 
+      //calls the api through the server, path: api/hello.js
+      const getLyrics = async () => {
+        const response = await fetch("/api/hello", {
+          method: "GET"
+        });
         const json = await response.json();
-        console.log(json.message.body.track);
-      };
+        console.log(json);
+      }
+
+      // getLyrics();
+
+      
 
       const fetchData = async () => {
         const response = await fetch("https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=5&offset=0", {
           method: "GET", headers: { Authorization: `Bearer ${session.accessToken}` }
         });
         const json = await response.json();
-        setTopArtists(json.items);
+        // setTopArtists(json.items);
       };
       // fetchData();
-      fetchMusic();
+      // fetchMusic();
     }
   }, [session]);
+
+
 
 
 
@@ -79,17 +100,40 @@ export default function Home() {
       </Head> */}
       <main className={`${styles.main} ${inter.className}`}>
         {/* hello {session.user.name} */}
-        <div>
+        {/* <div>
           top artists:
           {topArtists.map((item) => (
             <div key={item.id}>{item.name}</div>
           ))}
+        </div> */}
+        <div>
+          Lyrics for song: {song.Track_Name} by {song.Artist_Name}
         </div>
+        <label>Search:</label>
+
+        <div className="App">
+          <div style={{ margin: '0 auto', marginTop: '10%' }}>
+            <label>Search:</label>
+            <input type="text" onChange={(event) => handleSearch(event)} />
+          </div>
+          <div style={{ padding: 10 }}>
+            {filteredData.map((value, index) => {
+              return (
+                <div key={value.id}>
+                  <div style={styles}>
+                    {value.Track_Name} , {value.Artist_Name}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        <button onClick={handleClick}>new song</button>
       </main>
     </>
   )
 }
-
 async function getProfile(token, setId) {
   const profile = await fetchProfile(token);
   setId(profile.id)
