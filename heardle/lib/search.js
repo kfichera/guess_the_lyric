@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import musicData from "../json/music_names.json"
+import styles from "../src/styles/Search.module.css"
 
 
 export default function Search() {
@@ -137,20 +138,21 @@ function SearchTitle({ setGuess, setGuessed, updateScore }) {
 
 
     return (
-        <div>
-            <label>Search:</label>
-            <div className="App">
-                <div style={{ margin: '0 auto', marginTop: '10%' }}>
-                    <input type="text" onChange={(event) => handleSearch(event)} />
-                    {/* <button name="hint" onClick={handleHintClick(setGuess, setGuessed)}>Give me a hint!</button> */}
+      
+            <div class={styles.test}>
+                <div class={styles.search}>
+                    <div>
+                        Search: <input type="text" class={styles.searchBar} onChange={(event) => handleSearch(event)} />
+                        {/* <button name="hint" onClick={handleHintClick(setGuess, setGuessed)}>Give me a hint!</button> */}
+                    </div>
+                    {filteredData.map((data, index) => {
+                        return (
+                            <button class={styles.songName} key={data.key} value={data.Name} onClick={(event) => { handleClick(event, setGuess, setGuessed) }}> {data.Name} </button>
+                        )
+                    })}
                 </div>
-                {filteredData.map((data, index) => {
-                    return (
-                        <button key={data.key} value={data.Name} onClick={(event) => { handleClick(event, setGuess, setGuessed) }}> {data.Name} </button>
-                    )
-                })}
             </div>
-        </div>
+
     )
 
 }

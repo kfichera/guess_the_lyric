@@ -79,26 +79,7 @@ export default function Home() {
 
 
     checkDailyPlay(x, setX);
-    {
-      // setRandom(Math.floor(Math.random() * (musicData.length - 0 + 1)) + 0);
-      // console.log("random num in useEffect: " + random)
 
-      //calls the api through the server, path: api/hello.js
-
-
-
-
-      // const newSong = [{
-      //   id: musicData[random].Key,
-      //   name: musicData[random].Track_Name,
-      //   artist: musicData[random].Artist_Name,
-      //   lyrics: getLyrics(random)
-      // }];
-
-      // setSong(newSong);
-      // console.log(song);
-
-    }
 
     console.log(x);
     const fetchData = async () => {
@@ -122,7 +103,7 @@ export default function Home() {
     }
   }, [songGuess]);
 
- 
+
 
 
   return (
@@ -135,18 +116,20 @@ export default function Home() {
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         {/* hello {session.user.name} */}
-        <div>
+        <div className={styles.all}>
           <Lyrics lyrics={x.data.lyrics_disp} />
+
+          <div className={styles.guesses}>
+
+            <div className={styles.searchComp}>
+            <Search />
+
+            </div>
+
+            <Lyric_Guess />
+          </div>
+
         </div>
-
-        {/* <button onClick={handleClick}>new song</button> */}
-
-        {
-          <Search />
-        }
-
-        <Lyric_Guess/>
-
 
 
       </main>
@@ -249,16 +232,16 @@ function checkDailyPlay(x, setX) {
         const response = await fetch('/api/music/daily', {
           method: "GET"
         });
-  
-  
+
+
         const data = await response.json();
-  
+
         window.localStorage.setItem("GAME_DATA", JSON.stringify(data))
-  
+
         setX(data);
         return data;
       }
-  
+
       // call the function
       getDaily();
 
@@ -289,7 +272,7 @@ function checkDailyPlay(x, setX) {
     if (difference > 0) {
 
       //we want to reset game_status and guesses
-      
+
       newData.game_status = 'not_started';
       newData.guesses = {
         song_guess_time: null,

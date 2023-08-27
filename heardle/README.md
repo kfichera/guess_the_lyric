@@ -1,3 +1,19 @@
+## Welcome
+This is a project I've been working on through the summer of 2023. The main idea of this project is that there will be a display of a line of lyrics from a song picked at random daily. You will be able to guess the artist and song name then guess the next lyric. 
+
+The data is stored in local storage and updated daily, along with current score.
+
+Currently the basic functionality is implemented where there are lyrics displayed and the user must guess. 
+My future plans for this project include:
+* Custom game links to share with friends
+* End game screen with full lyrics, album art and song snippit
+* Stronger styling
+* More songs & non-daily / random play
+
+## Lyrics
+Lyrics were provided by the musixmatch api
+https://www.musixmatch.com
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
